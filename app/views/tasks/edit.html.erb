@@ -1,0 +1,20 @@
+<%= form_for [@task.project, @task] do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %><br />
+
+  <%= f.label :description %>
+  <%= f.text_field :description %><br />
+  <%= f.radio_button :difficulty_level, 1 %>
+  <%= f.label "1", value: 1 %>
+  <%= f.radio_button :difficulty_level, 2 %>
+  <%= f.label "2", value: 2 %>
+  <%= f.radio_button :difficulty_level, 3 %>
+  <%= f.label "3", value: 3 %>
+  <%= f.radio_button :difficulty_level, 4 %>
+  <%= f.label "4", value: 4 %>
+  <%= f.radio_button :difficulty_level, 5 %>
+  <%= f.label "5", value: 5 %><br />
+
+
+  <%= f.submit %>
+<% end %>

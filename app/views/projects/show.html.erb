@@ -2,8 +2,32 @@
 
 <p>
   <strong>Name:</strong>
-  <%= @project.name %>
+  <%= @projects.name %>
 </p>
 
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @projects.tasks.each do |project_task| %>
+      <tr>
+        <td><%= project_task.name %></td>
+        <td><%= project_task.description %></td>
+        <td>
+          <%= link_to 'Edit', edit_project_task_path(@projects, project_task.id), class: 'btn' %>
+         <%= link_to 'Destroy', project_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p><%= link_to 'Create a New Task', new_project_task_path(@project) %> </p>
 <%= link_to 'Edit', edit_project_path(@project) %> |
 <%= link_to 'Back', projects_path %>
