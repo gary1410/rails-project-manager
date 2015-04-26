@@ -21,7 +21,7 @@ class TasksController < ApplicationController
   end
 
   def update
-  @task = Task.find(params[:id])
+    @task = Task.find(params[:id])
     if @task.update(params_task)
       flash[:success] = "Updated!"
       redirect_to project_path(@task.project_id)
@@ -30,6 +30,12 @@ class TasksController < ApplicationController
       render :edit
     end
   end
+
+  def destroy
+    @task = Task.find(params[:id])
+    @task.destroy!
+  end
+
 
 private
 
