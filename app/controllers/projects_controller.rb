@@ -1,32 +1,36 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
-  # GET /projects
-  # GET /projects.json
   def index
     @projects = Project.page(params[:page]).per(10)
   end
 
-  # GET /projects/1
-  # GET /projects/1.json
   def show
-    @projects = Project.find(params[:id])
+    if @project.owners.where(id: current_user.id).first || @project.viewers.where(id: current_user.id).first
+      render :show
+    else
+      flash[:warning] = "Can't view because this isn't your project"
+      redirect_to projects_path
+    end
   end
 
-  # GET /projects/new
   def new
     @project = Project.new
   end
 
-  # GET /projects/1/edit
   def edit
+    if @project.owners.where(id: current_user.id).first || current_user.admin? == true
+      render :edit
+    else
+      flash[:warning] = "You don't have Owner and Admin privileges"
+      redirect_to projects_path
+    end
   end
 
-  # POST /projects
-  # POST /projects.json
   def create
     @project = Project.new(project_params)
-
+    @project.owners << current_user
     respond_to do |format|
       if @project.save
         format.html { redirect_to projects_path, notice: 'Project was successfully created.' }
@@ -38,8 +42,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /projects/1
-  # PATCH/PUT /projects/1.json
   def update
     respond_to do |format|
       if @project.update(project_params)
@@ -52,15 +54,32 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # DELETE /projects/1
-  # DELETE /projects/1.json
   def destroy
-    @project.destroy
     respond_to do |format|
-      format.html { redirect_to projects_url }
-      format.json { head :no_content }
+      if @project.owners.where(id: current_user.id).first || current_user.admin? == true
+        @project.destroy
+        format.html { redirect_to projects_path, notice: "Successfully Deleted."}
+      else
+        flash[:warning] = "You don't have Owner and Admin privileges"
+        redirect_to projects_path
+      end
     end
   end
+
+#Attempt here to delete a task on ajax
+
+  # def destroy
+  #   if @project.owners.where(id: current_user.id).first || current_user.admin? == true
+  #     @project.destroy
+  #     # format.html { redirect_to projects_path, notice: "Successfully Deleted!"}
+  #     render json: { task_list: render_to_string( partial: "tasks") }
+  #   else
+  #     render json: { error: @project.errors.full_messages.join(", ")}, status: :unprocessible_entity
+  #     # flash[:warning] = "You don't have Owner and Admin privileges"
+  #     # redirect_to projects_path
+  #   end
+  # end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
