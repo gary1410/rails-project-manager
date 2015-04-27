@@ -7,6 +7,11 @@
     <title><%= content_for?(:title) ? yield(:title) : "ProjectManager" %></title>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   </head>
   <body>
 
@@ -26,16 +31,22 @@
               </li>
             </ul>
 
-            <ul class="nav user-nav">
-              <% if user_signed_in? %>
-                <li><%= link_to "My Account", edit_user_registration_path %></li>
-                <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
-              <% else %>
-                <li><%= link_to "Sign in", user_session_path %></li>
-                <li><%= link_to "Sign up", new_user_registration_path %></li>
-              <% end %>
-            </ul>
-
+              <div class="btn-group user-nav">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-cog fa-lg dropdown"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                <% if user_signed_in? %>
+                  <li class="user-email"><%= current_user.email %></li>
+                  <hr>
+                  <li><%= link_to "My Account", edit_user_registration_path %></li>
+                  <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
+                <% else %>
+                  <li><%= link_to "Sign in", user_session_path %></li>
+                  <li><%= link_to "Sign up", new_user_registration_path %></li>
+                <% end %>
+                </ul>
+              </div>
 
           </div><!--/.nav-collapse -->
         </div>
@@ -57,7 +68,7 @@
     <!-- Javascripts
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <%= javascript_include_tag "application" %>
+
 
   </body>
 </html>
