@@ -8,24 +8,23 @@
     </tr>
   </thead>
 
-  <tbody>
+  <tbody id="project-form">
     <% @projects.each do |project| %>
       <tr>
         <td><%= project.name %></td>
         <td>
           <%= link_to 'Show', project, class: 'btn' %>
           <%= link_to 'Edit', edit_project_path(project), class: 'btn' %>
-          <%= link_to 'Destroy', project, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          <%= link_to 'Destroy', project, method: :delete, data: { confirm: 'Whoa, Are you sure?' }, :id => "delete-link", class: 'btn btn-danger delete' %>
         </td>
       </tr>
     <% end %>
   </tbody>
+
 </table>
 
-<br>
-
-<%= paginate @projects %>
-
-
 <%= link_to 'New Project', new_project_path %>
+<br>
+<%= paginate @projects %>
+<br>
 
