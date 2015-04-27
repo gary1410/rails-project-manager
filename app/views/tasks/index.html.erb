@@ -1,0 +1,25 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Difficulty Level</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @project.tasks.each do |project_task| %>
+      <tr>
+        <td><%= project_task.name %></td>
+        <td><%= project_task.description %></td>
+        <td><%= project_task.difficulty_level %></td>
+        <td>
+          <%= link_to 'Edit', edit_project_task_path(@project, project_task.id), class: 'btn' %>
+          <%= link_to 'Destroy', project_path(@project, project_task.id), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
