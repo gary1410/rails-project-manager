@@ -3,20 +3,25 @@ class Project < ActiveRecord::Base
   has_many :tasks
 
   # simpler version:
-  has_many :project_users
-  has_many :users, through: :project_users
+  # has_many :project_users
+  # has_many :users, through: :project_users
 
 
-  # # complicated version: 
+  # complicated version:
 
-  # ROLE = {
-  #   viewer: 1,
-  #   owner:  10
-  # }
-  
-  # has_many :project_viewers, class_name: :ProjectUser, conditions: {role: ROLE[:viewer]}
-  # has_many :viewers, source: :user, through: :project_viewers
+  ROLE = {
+    viewer: 1,
+    owner:  10
+  }
 
-  # has_many :project_owners, class_name: :ProjectUser, conditions: {role: ROLE[:owner]}
-  # has_many :owners, source: :user, through: :project_owners
+  has_many :project_viewers, class_name: :ProjectUser, conditions: {role: ROLE[:viewer]}
+  has_many :viewers, source: :user, through: :project_viewers
+
+  has_many :project_owners, class_name: :ProjectUser, conditions: {role: ROLE[:owner]}
+  has_many :owners, source: :user, through: :project_owners
+
+  def owner?(current_user)
+    self.owners.include?(current_user)
+  end
+
 end
